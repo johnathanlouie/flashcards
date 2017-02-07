@@ -1,0 +1,27 @@
+.hidden
+{
+	display: none;
+}
+
+#card-pronunciation
+{
+	font-family: "Meiryo", "Verdana";
+	font-size: 1.1em;
+}
+
+#card-form
+{
+	font-family: "KaiTi", "Meiryo", "Verdana";
+	font-size: 3em;
+}
+
+.partofspeech
+{
+	font-style: italic;
+	font-size: 1em;
+}
+
+.meaning li
+{
+	font-size: 1em;
+}
