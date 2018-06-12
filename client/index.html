@@ -1,113 +1,113 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-	<title>Flashcards</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="http://webframework.com/jl.css">
-	<link rel="stylesheet" href="flashcards.css">
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-	<script src="http://webframework.com/jl.js"></script>
-</head>
+    <head>
+        <title>Flashcards</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="http://webframework.com/jl.css">
+        <link rel="stylesheet" href="flashcards.css">
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <script src="http://webframework.com/jl.js"></script>
+    </head>
 
-<body>
+    <body>
 
-	<div data-role="page" id="page-library">
-		<div data-role="header" data-position="fixed">
-			<h1>Library</h1>
-		</div>
-		<div data-role="main" class="ui-content">
-			<p>Select at least one chapter, and then click the <kbd>Start</kbd> button at the button of the screen.</p>
-			<div data-role="collapsibleset" data-mini="true" id="library-container"></div>
-		</div>
-		<div data-role="footer" data-position="fixed">
-			<div data-role="navbar">
-				<ul>
-					<li><a href="#page-main" id="startpage-startbutton" class="ui-disabled" data-icon="check" onclick="player.next();">Start</a></li>
-				</ul>
-			</div>
-		</div>
-	</div>
+        <div data-role="page" id="page-library">
+            <div data-role="header" data-position="fixed">
+                <h1>Library</h1>
+            </div>
+            <div data-role="main" class="ui-content">
+                <p>Select at least one chapter, and then click the <kbd>Start</kbd> button at the button of the screen.</p>
+                <div data-role="collapsibleset" data-mini="true" id="library-container"></div>
+            </div>
+            <div data-role="footer" data-position="fixed">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#page-main" id="startpage-startbutton" class="ui-disabled" data-icon="check" onclick="player.next();">Start</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-	<div data-role="page" id="page-main">
-		<div data-role="header" data-position="fixed">
-			<h1>Flashcards</h1>
-			<div data-role="navbar">
-				<ul>
-					<li><a href="#page-library" data-icon="bars" id="nav-library">Library</a></li>
-					<li><a href="#page-settings" data-icon="gear">Settings</a></li>
-					<li><a href="#page-help" data-icon="info">Help</a></li>
-				</ul>
-			</div>
-		</div>
-		<div data-role="main" class="ui-content">
-			<div id="card-form"></div>
-			<div id="card-pronunciation"></div>
-			<div id="card-definition"></div>
-			<div data-role="popup" id="popup-empty" class="ui-content" data-position-to="#nav-library" data-arrow="t">There are no more cards. To select more, click the <kbd>Library</kbd> button.</div>
-		</div>
-		<div data-role="footer" data-position="fixed">
-			<div data-role="navbar">
-				<ul>
-					<li><a href="#" data-icon="arrow-l" onclick="player.prev();">Previous</a></li>
-					<li><a href="#" data-icon="delete" onclick="player.del();">Remove</a></li>
-					<li><a href="#" data-icon="eye" onclick="player.reveal();">Reveal</a></li>
-					<li><a href="#" data-icon="arrow-r" onclick="player.next();">Next</a></li>
-				</ul>
-			</div>
-		</div>
-	</div>
+        <div data-role="page" id="page-main">
+            <div data-role="header" data-position="fixed">
+                <h1>Flashcards</h1>
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#page-library" data-icon="bars" id="nav-library">Library</a></li>
+                        <li><a href="#page-settings" data-icon="gear">Settings</a></li>
+                        <li><a href="#page-help" data-icon="info">Help</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div data-role="main" class="ui-content">
+                <div id="card-form"></div>
+                <div id="card-pronunciation"></div>
+                <div id="card-definition"></div>
+                <div data-role="popup" id="popup-empty" class="ui-content" data-position-to="#nav-library" data-arrow="t">There are no more cards. To select more, click the <kbd>Library</kbd> button.</div>
+            </div>
+            <div data-role="footer" data-position="fixed">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#" data-icon="arrow-l" onclick="player.prev();">Previous</a></li>
+                        <li><a href="#" data-icon="delete" onclick="player.del();">Remove</a></li>
+                        <li><a href="#" data-icon="eye" onclick="player.reveal();">Reveal</a></li>
+                        <li><a href="#" data-icon="arrow-r" onclick="player.next();">Next</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-	<div data-role="page" id="page-settings">
-		<div data-role="header" data-position="fixed">
-			<h1>Settings</h1>
-			<a href="#" data-rel="back" class="ui-icon-arrow-l ui-btn ui-btn-icon-notext ui-alt-icon ui-nodisc-icon ui-corner-all">Back</a>
-		</div>
-		<div data-role="main" class="ui-content">
+        <div data-role="page" id="page-settings">
+            <div data-role="header" data-position="fixed">
+                <h1>Settings</h1>
+                <a href="#" data-rel="back" class="ui-icon-arrow-l ui-btn ui-btn-icon-notext ui-alt-icon ui-nodisc-icon ui-corner-all">Back</a>
+            </div>
+            <div data-role="main" class="ui-content">
 
-			<div class="ui-field-contain">
-				<label for="settings-options-random">Random</label>
-				<input type="checkbox" data-role="flipswitch" name="settings-options-random" id="settings-options-random" checked>
-			</div>
+                <div class="ui-field-contain">
+                    <label for="settings-options-random">Random</label>
+                    <input type="checkbox" data-role="flipswitch" name="settings-options-random" id="settings-options-random" checked>
+                </div>
 
-			<div>
-				<div class="ui-field-contain">
-					<label for="settings-options-term">Term</label>
-					<input type="checkbox" data-role="flipswitch" name="settings-options-term" id="settings-options-term" checked>
-				</div>
+                <div>
+                    <div class="ui-field-contain">
+                        <label for="settings-options-term">Term</label>
+                        <input type="checkbox" data-role="flipswitch" name="settings-options-term" id="settings-options-term" checked>
+                    </div>
 
-				<div class="ui-field-contain">
-					<label for="settings-options-pronunciation">Pronunciation</label>
-					<input type="checkbox" data-role="flipswitch" name="settings-options-pronunciation" id="settings-options-pronunciation">
-				</div>
+                    <div class="ui-field-contain">
+                        <label for="settings-options-pronunciation">Pronunciation</label>
+                        <input type="checkbox" data-role="flipswitch" name="settings-options-pronunciation" id="settings-options-pronunciation">
+                    </div>
 
-				<div class="ui-field-contain">
-					<label for="settings-options-definition">Definition</label>
-					<input type="checkbox" data-role="flipswitch" name="settings-options-definition" id="settings-options-definition">
-				</div>
-			</div>
+                    <div class="ui-field-contain">
+                        <label for="settings-options-definition">Definition</label>
+                        <input type="checkbox" data-role="flipswitch" name="settings-options-definition" id="settings-options-definition">
+                    </div>
+                </div>
 
-		</div>
-	</div>
+            </div>
+        </div>
 
-	<div data-role="page" id="page-help">
-		<div data-role="header" data-position="fixed">
-			<h1>Help</h1>
-			<a href="#" data-rel="back" class="ui-icon-arrow-l ui-btn ui-btn-icon-notext ui-alt-icon ui-nodisc-icon ui-corner-all">Back</a>
-		</div>
-		<div data-role="main" class="ui-content">
-			<p>To start using this program, at least one chapter from any book must be selected. To select a chapter, click on the <kbd>Library</kbd> button, click on any book title, then click on a chapter. Any number of chapters, from any number of books can be selected.</p>
-			<p>Once a chapter has been selected, click the <kbd>Back</kbd> button, which looks like the left arrow, to get back to the main screen.</p>
-			<p>The <kbd>Previous</kbd> and <kbd>Next</kbd> buttons cycle through the flashcards. The <kbd>Remove</kbd> button removes the card that is currently displayed. This is useful if one does not want to continue seeing it. The <kbd>Reveal</kbd> button shows the entire card. These 4 buttons only work if at least one chapter is selected.</p>
-			<p>The <kbd>Settings</kbd> button brings up options that control the type of hints on the front side of the card.</p>
-		</div>
-	</div>
+        <div data-role="page" id="page-help">
+            <div data-role="header" data-position="fixed">
+                <h1>Help</h1>
+                <a href="#" data-rel="back" class="ui-icon-arrow-l ui-btn ui-btn-icon-notext ui-alt-icon ui-nodisc-icon ui-corner-all">Back</a>
+            </div>
+            <div data-role="main" class="ui-content">
+                <p>To start using this program, at least one chapter from any book must be selected. To select a chapter, click on the <kbd>Library</kbd> button, click on any book title, then click on a chapter. Any number of chapters, from any number of books can be selected.</p>
+                <p>Once a chapter has been selected, click the <kbd>Back</kbd> button, which looks like the left arrow, to get back to the main screen.</p>
+                <p>The <kbd>Previous</kbd> and <kbd>Next</kbd> buttons cycle through the flashcards. The <kbd>Remove</kbd> button removes the card that is currently displayed. This is useful if one does not want to continue seeing it. The <kbd>Reveal</kbd> button shows the entire card. These 4 buttons only work if at least one chapter is selected.</p>
+                <p>The <kbd>Settings</kbd> button brings up options that control the type of hints on the front side of the card.</p>
+            </div>
+        </div>
 
-	<script src="player.js"></script>
+        <script src="player.js"></script>
 
-</body>
+    </body>
 
 </html>
