@@ -9,14 +9,10 @@ const app = express();
 
 function a(req, res) {}
 
-app.get("/library", a);
-
 function b(req, res) {}
 
-app.get("/library/:bookId", b);
-
-function e(err, output) {
-    console.log(output[0]);
+function c(req, res) {
+    res.sendFile(`${__dirname}/client/index.html`);
 }
 
 function d(req, res) {
@@ -25,18 +21,22 @@ function d(req, res) {
     res.send("");
 }
 
-app.post("/library", upload.single("fileToUpload"), d);
-
-function c(req, res) {
-    res.sendFile(`${__dirname}/client/index.html`);
+function e(err, output) {
+    console.log(output[0]);
 }
-
-app.get("/", c);
-
-app.use(express.static("client"));
 
 function f() {
     console.log("Started listening on port 3000!");
 }
+
+app.get("/library", a);
+
+app.get("/library/:bookId", b);
+
+app.post("/library", upload.single("fileToUpload"), d);
+
+app.get("/", c);
+
+app.use(express.static("client"));
 
 app.listen(3000, f);
