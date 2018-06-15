@@ -3,7 +3,7 @@
 const express = require("express");
 const multer = require("multer");
 const parse = require("csv-parse");
-const converter = require("./server/converter.js");
+const converter = require("./converter.js");
 var upload = multer();
 const app = express();
 
@@ -12,7 +12,7 @@ function a(req, res) {}
 function b(req, res) {}
 
 function c(req, res) {
-    res.sendFile(`${__dirname}/client/index.html`);
+    res.sendFile(`${__dirname}/public/index.html`);
 }
 
 function d(req, res) {
