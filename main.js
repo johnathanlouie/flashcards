@@ -17,26 +17,34 @@ function c(req, res) {
 
 function d(req, res) {
     var tsvData = req.file.buffer.toString();
+    function e(err, output) {
+        console.log(output[0]);
+        res.send("");
+    }
     parse(tsvData, {delimiter: "\t"}, e);
-    res.send("");
-}
-
-function e(err, output) {
-    console.log(output[0]);
 }
 
 function f() {
     console.log("Started listening on port 3000!");
 }
 
+function g(req, res, next) {
+    res.status(404).send("Sorry can't find that!");
+    next();
+}
+
+function h(err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+    next();
+}
+
 app.get("/library", a);
-
 app.get("/library/:bookId", b);
-
 app.post("/library", upload.single("fileToUpload"), d);
-
 app.get("/", c);
-
-app.use(express.static("client"));
+app.use(express.static("public"));
+app.use(g);
+app.use(h);
 
 app.listen(3000, f);
