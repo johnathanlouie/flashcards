@@ -1,73 +1,66 @@
-exports;
-function start(label, data)
-{
-    label = objPropParser(label);
-    var arrayJSON = toJSON(data, label);
-    $("#meta").val(makeBookMetaJSON());
+function parseArray(name) {
+    var array = {};
+    var bracket1 = name.indexOf("[");
+    var bracket2 = name.indexOf("]");
+    var arrayIndexStr = name.substring(bracket1 + 1, bracket2);
+    array.name = name.substring(0, bracket1);
+    array.index = Number(arrayIndexStr);
+    return array;
 }
 
-// turns an array of tree notation strings into an array of labels
-function objPropParser(strArray)
-{
-    var delimiter = '.';
-    for (var i in strArray)
-    {
-        strArray[i] = strArray[i].split(delimiter);
-        for (var j in strArray[i])
-        {
-            var tempArray = [null, null];
-            var tempNumber = strArray[i][j].match(/\d+/);
-            var tempWords = jl.string.toCamelCase(strArray[i][j]);
-            if (tempWords !== "")
-            {
-                tempArray[0] = tempWords;
-            }
-            if (tempNumber !== null)
-            {
-                tempArray[1] = Number(tempNumber[0]);
-            }
-            strArray[i][j] = tempArray;
-        }
-    }
-    return strArray;
+function isArray(name) {
+    return name.indexOf("[") !== -1;
 }
 
-function toJSON(parseTree, category)
-{
-    var JSONContainer = [];
-    for (var i in parseTree) // i is the row number ie the term
-    {
-        var tempObject = {};
-        for (var j in parseTree[i]) // j is the column number ie [i][j] is the leaf of the term
-        {
-            if (!(/\S/.test(parseTree[i][j])))
-            {
-                continue;
-            }
-            addProp(tempObject, category[j], parseTree[i][j]);
-        }
-        JSONContainer.push(tempObject);
+function getObject(parent, property) {
+    if (typeof parent[property] !== "object" || parent[property] === null) {
+        parent[property] = {};
     }
-    return JSONContainer;
+    return parent[property];
 }
 
-function makeBookMetaJSON()
-{
-    var obj = {
-        "language": $("#language").val(),
-        "title": $("#title").val()
-    };
-    if ($("#subtitle").val().length !== 0)
-    {
-        obj.subtitle = $("#subtitle").val();
+function getArray(parent, property) {
+    if (!Array.isArray(parent[property])) {
+        parent[property] = [];
     }
-    obj.author = [];
-    for (let i of [$("#author1").val(), $("#author2").val(), $("#author3").val(), $("#author4").val(), $("#author5").val()])
-    {
-        if (i.length !== 0)
-        {
-            obj.author.push(i);
+    return parent[property];
+}
+
+function addProperty(parent, path, value) {
+    while (path.length > 0) {
+        name = path.shift();
+        if (isArray(name) && path.length === 0) {
+            var x = parseArray(name);
+            getArray(parent, x.name)[x.index] = value;
+        } else if (isArray(name) && path.length > 0) {
+            var x = parseArray(name);
+            parent = getObject(getArray(parent, x.name), x.index);
+        } else if (path.length === 0) {
+            parent[name] = value;
+        } else {
+            parent = getObject(parent, name);
         }
     }
-    return JSON.stringify(obj);
 }
+
+function rowHandler(header, row) {
+    var obj = {};
+    for (let col in header) {
+        var value = row[col];
+        if (value.length > 0) {
+            addProperty(obj, header[col].split("."), value);
+        }
+    }
+    return obj;
+}
+
+function main(input) {
+    var output = [];
+    var header = input.shift();
+    for (let row of input) {
+        output.push(rowHandler(header, row));
+    }
+    return output;
+}
+
+module.exports = main;
