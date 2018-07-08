@@ -4,6 +4,7 @@ const express = require("express");
 const multer = require("multer");
 const parse = require("csv-parse");
 const converter = require("./converter.js");
+const isValid = require("./filter.js");
 
 var upload = multer();
 const app = express();
@@ -21,8 +22,10 @@ function d(req, res, next) {
     function e(err, output) {
         if (err) {
             throw new Error("tsv parser error");
-        } else {
+        } else if (isValid(output[0])) {
             res.send(JSON.stringify(converter(output)));
+        } else {
+            res.send("Invalid");
         }
     }
     parse(tsvData, {delimiter: "\t"}, e);
