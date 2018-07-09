@@ -3,6 +3,7 @@
 const express = require("express");
 const multer = require("multer");
 const parse = require("csv-parse");
+const MongoClient = require('mongodb').MongoClient;
 const converter = require("./converter.js");
 const isValid = require("./filter.js");
 
@@ -19,11 +20,28 @@ function c(req, res, next) {
 
 function d(req, res, next) {
     var tsvData = req.file.buffer.toString();
+
     function e(err, output) {
         if (err) {
             throw new Error("tsv parser error");
         } else if (isValid(output[0])) {
-            res.send(JSON.stringify(converter(output)));
+            let docs = converter(output);
+
+            function i(mongoClient) {
+                return mongoClient.db().collection("cards").insertMany(docs);
+            }
+
+            function j(result) {
+                console.log(result.result);
+                res.send("good upload");
+            }
+
+            function k(error) {
+                console.log("failed", error);
+                res.send("bad upload");
+            }
+
+            MongoClient.connect("mongodb://localhost/flashcards").then(i).then(j).catch(k);
         } else {
             res.send("Invalid");
         }
