@@ -10,9 +10,9 @@ function main(header) {
             oneValid = true;
         } else if (/^definition\[\d\]\.meaning\[\d\]$/.test(i)) {
             oneValid = true;
-        } else if (/^index\[\d\]\.chapter$/.test(i)) {
+        } else if (/^chapter$/.test(i)) {
             oneValid = true;
-        } else if (/^index\[\d\]\.termNumber$/.test(i)) {
+        } else if (/^ordinal$/.test(i)) {
             oneValid = true;
         }
         wholeValid = wholeValid && oneValid;
