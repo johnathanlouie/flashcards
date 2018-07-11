@@ -3,9 +3,9 @@
 const express = require("express");
 const multer = require("multer");
 const parse = require("csv-parse");
-const MongoClient = require("mongodb").MongoClient;
 const converter = require("./converter.js");
 const isValid = require("./filter.js");
+const db = require("./database.js");
 
 const upload = multer();
 const app = express();
@@ -21,12 +21,19 @@ function c(req, res, next) {
 function d(req, res, next) {
     var tsvData = req.file.buffer.toString();
 
+    function i(error, results) {
+        if (error) {
+            res.json(error);
+        } else {
+            res.json(results);
+        }
+    }
+
     function e(err, output) {
         if (err) {
-            throw new Error("tsv parser error");
+            res.json(err);
         } else if (isValid(output[0])) {
-            res.locals.vocab = converter(output);
-            next();
+            db.insertMany("cards", converter(output), i);
         } else {
             res.send("Invalid");
         }
@@ -47,28 +54,10 @@ function h(err, req, res, next) {
     res.status(500).send("Something broke!");
 }
 
-function l(req, res, next) {
-    function i(mongoClient) {
-        return mongoClient.db().collection("cards").insertMany(res.locals.vocab);
-    }
-
-    function j(result) {
-        console.log(result.result);
-        res.send("good upload");
-    }
-
-    function k(error) {
-        console.log("failed", error);
-        res.send("bad upload");
-    }
-
-    MongoClient.connect("mongodb://localhost/flashcards").then(i).then(j).catch(k);
-}
-
 app.get("/", c);
 app.get("/library", a);
 app.get("/library/:bookId", b);
-app.post("/library", upload.single("fileToUpload"), d, l);
+app.post("/library", upload.single("fileToUpload"), d);
 app.use(express.static("public"));
 app.use(g);
 app.use(h);
