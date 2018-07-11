@@ -25,23 +25,8 @@ function d(req, res, next) {
         if (err) {
             throw new Error("tsv parser error");
         } else if (isValid(output[0])) {
-            let docs = converter(output);
-
-            function i(mongoClient) {
-                return mongoClient.db().collection("cards").insertMany(docs);
-            }
-
-            function j(result) {
-                console.log(result.result);
-                res.send("good upload");
-            }
-
-            function k(error) {
-                console.log("failed", error);
-                res.send("bad upload");
-            }
-
-            MongoClient.connect("mongodb://localhost/flashcards").then(i).then(j).catch(k);
+            res.locals.vocab = converter(output);
+            next();
         } else {
             res.send("Invalid");
         }
@@ -62,10 +47,28 @@ function h(err, req, res, next) {
     res.status(500).send("Something broke!");
 }
 
+function l(req, res, next) {
+    function i(mongoClient) {
+        return mongoClient.db().collection("cards").insertMany(res.locals.vocab);
+    }
+
+    function j(result) {
+        console.log(result.result);
+        res.send("good upload");
+    }
+
+    function k(error) {
+        console.log("failed", error);
+        res.send("bad upload");
+    }
+
+    MongoClient.connect("mongodb://localhost/flashcards").then(i).then(j).catch(k);
+}
+
 app.get("/", c);
 app.get("/library", a);
 app.get("/library/:bookId", b);
-app.post("/library", upload.single("fileToUpload"), d);
+app.post("/library", upload.single("fileToUpload"), d, l);
 app.use(express.static("public"));
 app.use(g);
 app.use(h);
