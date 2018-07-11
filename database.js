@@ -5,19 +5,28 @@ const MONGODB_URL = "mongodb://localhost/flashcards";
 var database = {};
 
 database.insertMany = function (collection, data, callback) {
-    function i(mongoClient) {
-        return mongoClient.db().collection(collection).insertMany(data);
+    function a1(client) {
+
+        function b1(result) {
+            callback(undefined, result);
+        }
+
+        function b2(error) {
+            callback(error);
+        }
+
+        function c() {
+            return client.close();
+        }
+
+        return client.db().collection(collection).insertMany(data).then(b1, b2).then(c);
     }
 
-    function j(result) {
-        callback(undefined, result);
-    }
-
-    function k(error) {
+    function a2(error) {
         callback(error);
     }
 
-    MongoClient.connect(MONGODB_URL).then(i).then(j).catch(k);
+    MongoClient.connect(MONGODB_URL).then(a1, a2);
 };
 
 module.exports = database;
