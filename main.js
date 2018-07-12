@@ -3,6 +3,7 @@
 const express = require("express");
 const multer = require("multer");
 const parse = require("csv-parse");
+const lodash = require("lodash");
 const converter = require("./converter.js");
 const isValid = require("./filter.js");
 const db = require("./database.js");
@@ -19,26 +20,60 @@ function c(req, res, next) {
 }
 
 function d(req, res, next) {
-    var tsvData = req.file.buffer.toString();
 
-    function i(error, results) {
+    function e(error, vocabTsv) {
+
+        function j(error, bookTsv) {
+
+            function l(error, results) {
+                if (error) {
+                    res.json(error);
+                } else {
+                    res.json(results);
+                }
+            }
+
+            function k(error, results) {
+                if (error) {
+                    res.json(error);
+                } else {
+                    var bookJson = converter(bookTsv)[0];
+                    bookJson.chapters = Object.values(results.insertedIds);
+                    console.log(bookJson);
+                    db.insertOne("books", bookJson, l);
+                }
+            }
+
+            function i(error, results) {
+                if (error) {
+                    res.json(error);
+                } else {
+                    var sorted = lodash.groupBy(results.ops, card => card.chapter);
+                    var chapters = [];
+                    for (let chapNum in sorted) {
+                        chapters.push({ordinal: chapNum, vocab: sorted[chapNum].map(card => card._id)});
+                    }
+                    db.insertMany("chapters", chapters, k);
+                }
+            }
+
+            if (error) {
+                res.json(error);
+            } else if (isValid(vocabTsv[0])) {
+                db.insertMany("cards", converter(vocabTsv), i);
+            } else {
+                res.json({});
+            }
+        }
+
         if (error) {
             res.json(error);
         } else {
-            res.json(results);
+            parse(req.files.book[0].buffer.toString(), {delimiter: "\t"}, j);
         }
     }
 
-    function e(err, output) {
-        if (err) {
-            res.json(err);
-        } else if (isValid(output[0])) {
-            db.insertMany("cards", converter(output), i);
-        } else {
-            res.send("Invalid");
-        }
-    }
-    parse(tsvData, {delimiter: "\t"}, e);
+    parse(req.files.vocab[0].buffer.toString(), {delimiter: "\t"}, e);
 }
 
 function f() {
@@ -57,7 +92,7 @@ function h(err, req, res, next) {
 app.get("/", c);
 app.get("/library", a);
 app.get("/library/:bookId", b);
-app.post("/library", upload.single("fileToUpload"), d);
+app.post("/library", upload.fields([{name: "book"}, {name: "vocab"}]), d);
 app.use(express.static("public"));
 app.use(g);
 app.use(h);
