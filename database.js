@@ -4,7 +4,7 @@ const MONGODB_URL = "mongodb://localhost/flashcards";
 
 var database = {};
 
-database.find = function (collection, query, callback) {
+database.find = function (collection, query, project, callback) {
 
     function a1(client) {
 
@@ -17,7 +17,7 @@ database.find = function (collection, query, callback) {
             client.close();
         }
 
-        client.db().collection(collection).find(query).toArray(b);
+        client.db().collection(collection).find(query).project(project).toArray(b);
     }
 
     function a2(error) {
