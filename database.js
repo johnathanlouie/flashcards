@@ -6,19 +6,24 @@ var database = {};
 
 database.findOne = function (collection, query, project, callback) {
 
-    function a(client) {
-        return client.db().collection(collection).findOne(query, {projection: project});
-    }
-
-    function b(result) {
-        callback(undefined, result);
-    }
-
-    function c(error) {
+    function fail(error) {
         callback(error);
     }
 
-    MongoClient.connect(MONGODB_URL).then(a).then(b).catch(c);
+    function a(client) {
+
+        function b(result) {
+            callback(undefined, result);
+        }
+
+        function c() {
+            client.close();
+        }
+
+        return client.db().collection(collection).findOne(query, {projection: project}).then(b).catch(fail).then(c);
+    }
+
+    MongoClient.connect(MONGODB_URL).then(a, fail);
 };
 
 database.find = function (collection, query, project, callback) {
