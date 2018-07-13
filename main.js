@@ -12,12 +12,22 @@ const db = require("./database.js");
 const upload = multer();
 const app = express();
 
+function serverMsg(code, msg, data) {
+    return {code: code, msg: msg, data: data};
+}
+
+serverMsg.OK = 0;
+serverMsg.ERROR = 1;
+serverMsg.DB_CONNECTION_ERR = 2;
+serverMsg.DB_READ_ERR = 3;
+serverMsg.DB_WRITE_ERR = 4;
+
 function a(req, res, next) {
     function x(error, documents) {
         if (error) {
-            res.json(error);
+            res.json(serverMsg(serverMsg.ERROR, ""));
         } else {
-            res.json(documents);
+            res.json(serverMsg(serverMsg.OK, "", documents));
         }
     }
     db.find("books", {}, {chapters: 0}, x);
@@ -27,15 +37,15 @@ function b(req, res, next) {
 
     function y(error, result) {
         if (error) {
-            res.json(error);
+            res.json(serverMsg(serverMsg.ERROR, ""));
         } else {
-            res.json(result);
+            res.json(serverMsg(serverMsg.OK, "", result));
         }
     }
 
     function x(error, book) {
         if (error) {
-            res.json(error);
+            res.json(serverMsg(serverMsg.ERROR, ""));
         } else {
             db.find("chapters", {_id: {$in: book.chapters}}, {ordinal: 1}, y);
         }
@@ -56,15 +66,15 @@ function d(req, res, next) {
 
             function l(error, results) {
                 if (error) {
-                    res.json(error);
+                    res.json(serverMsg(serverMsg.ERROR, ""));
                 } else {
-                    res.json(results);
+                    res.json(serverMsg(serverMsg.OK, "", results));
                 }
             }
 
             function k(error, results) {
                 if (error) {
-                    res.json(error);
+                    res.json(serverMsg(serverMsg.ERROR, ""));
                 } else {
                     var bookJson = converter(bookTsv)[0];
                     bookJson.chapters = Object.values(results.insertedIds);
@@ -75,7 +85,7 @@ function d(req, res, next) {
 
             function i(error, results) {
                 if (error) {
-                    res.json(error);
+                    res.json(serverMsg(serverMsg.ERROR, ""));
                 } else {
                     var sorted = lodash.groupBy(results.ops, card => card.chapter);
                     var chapters = [];
@@ -87,16 +97,16 @@ function d(req, res, next) {
             }
 
             if (error) {
-                res.json(error);
+                res.json(serverMsg(serverMsg.ERROR, ""));
             } else if (isValid(vocabTsv[0])) {
                 db.insertMany("cards", converter(vocabTsv), i);
             } else {
-                res.json({});
+                res.json(serverMsg(serverMsg.ERROR, ""));
             }
         }
 
         if (error) {
-            res.json(error);
+            res.json(serverMsg(serverMsg.ERROR, ""));
         } else {
             parse(req.files.book[0].buffer.toString(), {delimiter: "\t"}, j);
         }
@@ -115,22 +125,22 @@ function g(req, res, next) {
 
 function h(err, req, res, next) {
     console.error(err.stack);
-    res.status(500).send("Something broke!");
+    res.status(500).json(serverMsg(serverMsg.ERROR, ""));
 }
 
 function i(req, res, next) {
 
     function y(error, result) {
         if (error) {
-            res.json(error);
+            res.json(serverMsg(serverMsg.ERROR, ""));
         } else {
-            res.json(result);
+            res.json(serverMsg(serverMsg.OK, "", result));
         }
     }
 
     function x(error, chapter) {
         if (error) {
-            res.json(error);
+            res.json(serverMsg(serverMsg.ERROR, ""));
         } else {
             db.find("cards", {_id: {$in: chapter.vocab}}, {}, y);
         }
