@@ -4,6 +4,23 @@ const MONGODB_URL = "mongodb://localhost/flashcards";
 
 var database = {};
 
+database.findOne = function (collection, query, project, callback) {
+
+    function a(client) {
+        return client.db().collection(collection).findOne(query, {projection: project});
+    }
+
+    function b(result) {
+        callback(undefined, result);
+    }
+
+    function c(error) {
+        callback(error);
+    }
+
+    MongoClient.connect(MONGODB_URL).then(a).then(b).catch(c);
+};
+
 database.find = function (collection, query, project, callback) {
 
     function a1(client) {
