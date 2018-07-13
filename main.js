@@ -4,6 +4,7 @@ const express = require("express");
 const multer = require("multer");
 const parse = require("csv-parse");
 const lodash = require("lodash");
+const mongo = require("mongodb");
 const converter = require("./converter.js");
 const isValid = require("./filter.js");
 const db = require("./database.js");
@@ -11,7 +12,16 @@ const db = require("./database.js");
 const upload = multer();
 const app = express();
 
-function a(req, res, next) {}
+function a(req, res, next) {
+    function x(error, documents) {
+        if (error) {
+            res.json(error);
+        } else {
+            res.json(documents);
+        }
+    }
+    db.find("books", {}, {chapters: 0}, x);
+}
 
 function b(req, res, next) {}
 
