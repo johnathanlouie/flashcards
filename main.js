@@ -23,7 +23,26 @@ function a(req, res, next) {
     db.find("books", {}, {chapters: 0}, x);
 }
 
-function b(req, res, next) {}
+function b(req, res, next) {
+
+    function y(error, result) {
+        if (error) {
+            res.json(error);
+        } else {
+            res.json(result);
+        }
+    }
+
+    function x(error, book) {
+        if (error) {
+            res.json(error);
+        } else {
+            db.find("chapters", {_id: {$in: book.chapters}}, {ordinal: 1}, y);
+        }
+    }
+
+    db.findOne("books", {_id: new mongo.ObjectID(req.params.bookId)}, {chapters: 1}, x);
+}
 
 function c(req, res, next) {
     res.sendFile(`${__dirname}/public/index.html`);
