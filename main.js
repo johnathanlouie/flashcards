@@ -118,9 +118,31 @@ function h(err, req, res, next) {
     res.status(500).send("Something broke!");
 }
 
+function i(req, res, next) {
+
+    function y(error, result) {
+        if (error) {
+            res.json(error);
+        } else {
+            res.json(result);
+        }
+    }
+
+    function x(error, chapter) {
+        if (error) {
+            res.json(error);
+        } else {
+            db.find("cards", {_id: {$in: chapter.vocab}}, {}, y);
+        }
+    }
+
+    db.findOne("chapters", {_id: new mongo.ObjectID(req.params.chapterId)}, {vocab: 1}, x);
+}
+
 app.get("/", c);
 app.get("/library", a);
-app.get("/library/:bookId", b);
+app.get("/library/book/:bookId", b);
+app.get("/library/chapter/:chapterId", i);
 app.post("/library", upload.fields([{name: "book"}, {name: "vocab"}]), d);
 app.use(express.static("public"));
 app.use(g);
