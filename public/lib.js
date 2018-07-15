@@ -1,65 +1,61 @@
-import player from "./player.js";
-var cache = null;
+var indexCache = null;
+var booksCache = {};
+var chaptersCache = {};
+
 const SERVER_URI = "library";
 
-function getIndexCallback(jsonObj, textStatus, jqXHR)
+function getIndex(callback)
 {
-    cache = [];
-    for (let book of jsonObj)
+    function cb(serverMessage, textStatus, jqXHR)
     {
-        cache[book.id] = book;
+        // TODO error handling
+        indexCache = serverMessage.data;
+        callback(undefined, indexCache);
     }
-    player.indexcb(cache);
-}
-
-function getIndex()
-{
-    if (cache === null)
+    if (indexCache === null)
     {
-        $.getJSON(SERVER_URI, "", getIndexCallback);
+        $.getJSON(SERVER_URI, "", cb);
     }
     else
     {
-        player.indexcb(cache);
+        callback(undefined, indexCache);
     }
 }
 
-function getBook(bookid)
+function getBook(id, callback)
 {
-    function cb(jsonObj, textStatus, jqXHR)
+    function cb(serverMessage, textStatus, jqXHR)
     {
-        var chapters = [];
-        for (let card of jsonObj)
-        {
-            for (let loc of card.index)
-            {
-                var ch = loc.chapter;
-                var num = loc.termNumber;
-                if (typeof chapters[ch] === "undefined")
-                {
-                    chapters[ch] = {};
-                    chapters[ch].ordinal = ch;
-                    chapters[ch].cards = [];
-                }
-                chapters[ch].cards[num] = card;
-            }
-        }
-        cache[bookid].chapters = chapters;
-        player.bookcb(cache[bookid]);
+        // TODO error handling
+        booksCache[id] = serverMessage.data;
+        callback(undefined, booksCache[id]);
     }
-    if (typeof cache[bookid].chapters === "undefined")
+    if (typeof booksCache[id] === "undefined")
     {
-        $.getJSON(SERVER_URI + bookid, "", cb);
+        $.getJSON(`${SERVER_URI}/book/${id}`, "", cb);
     }
     else
     {
-        player.bookcb(cache[bookid]);
+        callback(undefined, booksCache[id]);
     }
 }
 
-function getChapter(bookid, chapterNum)
+function getChapter(id, callback)
 {
-    return cache[bookid].chapters[chapterNum];
+    function cb(serverMessage, textStatus, jqXHR)
+    {
+        // TODO error handling
+        chaptersCache[id] = serverMessage.data;
+        callback(undefined, chaptersCache[id]);
+    }
+    if (typeof chaptersCache[id] === "undefined")
+    {
+        $.getJSON(`${SERVER_URI}/chapter/${id}`, "", cb);
+    }
+    else
+    {
+        callback(undefined, chaptersCache[id]);
+    }
 }
 
 const lib = {};
