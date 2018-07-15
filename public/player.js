@@ -1,4 +1,4 @@
-/* global jl */
+/* global _ */
 
 var playlist = (function ()
 {
@@ -133,7 +133,7 @@ var player = (function ()
                 var cards = playlist.getCards();
                 if ($(randomCheckbox).prop("checked"))
                 {
-                    jl.array.shuffle(cards);
+                    cards = _.shuffle(cards);
                 }
                 queue.addCards(cards);
                 //queue.print();// diagnostic
@@ -189,12 +189,12 @@ var player = (function ()
             if (typeof obj === "undefined")
             {
                 continue; }
-            var bookDiv = jl(libContainer).newChild("div").attr("data-role", "collapsible");
-            bookDiv.newChild("h3").prop("onclick", function ()
+            var bookDiv = $("<div>").appendTo(libContainer).attr("data-role", "collapsible");
+            $("<h3>").appendTo(bookDiv).prop("onclick", function ()
             {
                 player.loadBook(obj.id);
             }).val(obj.title);
-            bookDiv.newChild("div").attr("id", `book-chapter-container-${obj.id}`).attr("class", "jl-container-flex-1");
+            $("<div>").appendTo(bookDiv).attr("id", `book-chapter-container-${obj.id}`).attr("class", "jl-container-flex-1");
         }
         $(libContainer).enhanceWithin();
     };
@@ -211,19 +211,19 @@ var player = (function ()
 
     player.bookcb = function (bookObj)
     {
-        var chaptersContainer = jl(`#book-chapter-container-${bookObj.id}`);
+        var chaptersContainer = $(`#book-chapter-container-${bookObj.id}`);
         for (var chapterObj of bookObj.chapters)
         {
             if (typeof chapterObj === "undefined")
             {
                 continue; }
             var id = bookObj.id + "-" + chapterObj.ordinal;
-            var container = chaptersContainer.newChild("div").attr("class", "jl-container-checkbox-1");
-            container.newChild("input").attr("id", id).attr("data-role", "none").attr("type", "checkbox").prop("bookId", bookObj.id).prop("chapterNum", chapterObj.ordinal).prop("onchange", function ()
+            var container = $("<div>").appendTo(chaptersContainer).attr("class", "jl-container-checkbox-1");
+            $("<input>").appendTo(container).attr("id", id).attr("data-role", "none").attr("type", "checkbox").prop("bookId", bookObj.id).prop("chapterNum", chapterObj.ordinal).prop("onchange", function ()
             {
                 player.chapterChange(this.bookId, this.chapterNum);
             });
-            container.newChild("label").attr("for", id).val(chapterObj.ordinal);
+            $("<label>").appendTo(container).attr("for", id).val(chapterObj.ordinal);
         }
     };
 
