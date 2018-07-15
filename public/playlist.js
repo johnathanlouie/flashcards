@@ -1,15 +1,14 @@
-var playlist = {};
 var cards = [];
 var chapters = new Map();
 
-playlist.add = function (bookId, chapterNum, cardsArray)
+function add(bookId, chapterNum, cardsArray)
 {
     var id = createId(bookId, chapterNum);
     chapters.set(id, cardsArray);
     safeAdd(cardsArray);
-};
+}
 
-playlist.remove = function (bookId, chapterNum)
+function remove(bookId, chapterNum)
 {
     var id = createId(bookId, chapterNum);
     chapters.delete(id);
@@ -18,7 +17,7 @@ playlist.remove = function (bookId, chapterNum)
     {
         safeAdd(chapter);
     }
-};
+}
 
 function filterFunc(currentValue)
 {
@@ -36,14 +35,20 @@ function createId(bookId, chapterNum)
     return bookId + "-" + chapterNum;
 }
 
-playlist.getCards = function ()
+function getCards()
 {
     return cards.slice();
-};
+}
 
-playlist.isEmpty = function ()
+function isEmpty()
 {
     return cards.length === 0;
-};
+}
+
+const playlist = {};
+playlist.add = add;
+playlist.remove = remove;
+playlist.getCards = getCards;
+playlist.isEmpty = isEmpty;
 
 export default playlist;

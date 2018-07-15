@@ -1,14 +1,13 @@
-var queue = {};
 var now = null;
 var prev = [];
 var next = [];
 
-queue.getNow = function ()
+function getNow()
 {
     return now;
-};
+}
 
-queue.prev = function ()
+function prev2()
 {
     if (prev.length === 0)
     {
@@ -19,9 +18,9 @@ queue.prev = function ()
         next.unshift(now);
     }
     now = prev.pop();
-};
+}
 
-queue.next = function ()
+function next2()
 {
     if (next.length === 0)
     {
@@ -32,34 +31,34 @@ queue.next = function ()
         prev.push(now);
     }
     now = next.shift();
-};
+}
 
-queue.hasNext = function ()
+function hasNext()
 {
     return next.length > 0;
-};
+}
 
-queue.hasPrev = function ()
+function hasPrev()
 {
     return prev.length > 0;
-};
+}
 
-queue.addCards = function (cards)
+function addCards(cards)
 {
     if (!Array.isArray(cards))
     {
         throw new Error("queue add cards not an array");
     }
     next = next.concat(cards);
-};
+}
 
-queue.clear = function ()
+function clear()
 {
     next = [];
-};
+}
 
 // diagnostic function
-queue.print = function ()
+function print()
 {
     console.log("================now===================");
     console.log(now ? now.term[0].form[0] : undefined);
@@ -68,6 +67,16 @@ queue.print = function ()
     {
         console.log(i + ": " + (next[i] ? next[i].term[0].form[0] : undefined));
     }
-};
+}
+
+const queue = {};
+queue.getNow = getNow;
+queue.prev = prev2;
+queue.next = next2;
+queue.hasNext = hasNext;
+queue.hasPrev = hasPrev;
+queue.addCards = addCards;
+queue.clear = clear;
+queue.print = print;
 
 export default queue;

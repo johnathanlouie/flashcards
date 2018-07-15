@@ -1,7 +1,6 @@
 import playlist from "./playlist.js";
 import queue from "./queue.js";
 import lib from "./lib.js";
-var player = {};
 var randomCheckbox = "#settings-options-random";
 
 var card = {};
@@ -63,14 +62,15 @@ function loadCardInfo(word)
             $(div).addClass("partofspeech");
             $(ol).addClass("meaning");
         }
-    } else
+    }
+    else
     {
         $(card.all).text("There are no cards selected.");
     }
 }
 
 // what if queue isnt empty
-player.next = function ()
+function next()
 {
     if (!playlist.isEmpty())
     {
@@ -86,47 +86,53 @@ player.next = function ()
         }
         queue.next();
         changeCard();
-    } else
+    }
+    else
     {
         // alert user is empty
         console.log("playlist empty");
     }
-};
+}
 
-player.prev = function ()
+function prev()
 {
     if (queue.hasPrev())
     {
         queue.prev();
         changeCard();
-    } else
+    }
+    else
     {
         // what if empty
     }
-};
+}
 
-player.remove = function ()
-{};
+function remove()
+{
 
-player.reveal = function ()
+}
+
+function reveal()
 {
     $(card.all).removeClass("hidden");
-};
+}
 
-player.randomChange = function ()
-{};
+function randomChange()
+{
 
-player.loadIndex = function ()
+}
+
+function loadIndex()
 {
     lib.getIndex();
-};
+}
 
 // <div data-role="collapsible">
 // <h3 fc-bookid="${obj.id}" fc-booktitle="${obj.title}" onclick="player.loadBook($(this).attr('fc-bookid'));">${obj.title}</h3>
 // <div id="book-chapter-container-${obj.id}" class="jl-container-flex-1"></div>
 // </div>
 
-player.indexcb = function (index)
+function indexcb(index)
 {
     var libContainer = "#library-container";
     $(libContainer).empty();
@@ -143,19 +149,19 @@ player.indexcb = function (index)
         $("<div>").appendTo(bookDiv).attr("id", `book-chapter-container-${obj.id}`).attr("class", "jl-container-flex-1");
     }
     $(libContainer).enhanceWithin();
-};
+}
 
-player.loadBook = function (bookid)
+function loadBook(bookid)
 {
     lib.getBook(bookid);
-};
+}
 
 // <div class='jl-container-checkbox-1'>
 // <input id="" data-role='none' type='checkbox'>
 // <label for=""></label>
 // </div>
 
-player.bookcb = function (bookObj)
+function bookcb(bookObj)
 {
     var chaptersContainer = $(`#book-chapter-container-${bookObj.id}`);
     for (var chapterObj of bookObj.chapters)
@@ -171,22 +177,23 @@ player.bookcb = function (bookObj)
         });
         $("<label>").appendTo(container).attr("for", id).val(chapterObj.ordinal);
     }
-};
+}
 
-player.chapterChange = function (bookId, chapterNum)
+function chapterChange(bookId, chapterNum)
 {
     if ($("#" + bookId + "-" + chapterNum).prop("checked"))
     {
         var chapter = lib.getChapter(bookId, chapterNum);
         playlist.add(bookId, chapterNum, chapter.cards);
-    } else
+    }
+    else
     {
         playlist.remove(bookId, chapterNum);
     }
     $("#startpage-startbutton").toggleClass("ui-disabled", playlist.isEmpty());
-};
+}
 
-player.keydown = function (eventObject)
+function keydown(eventObject)
 {
     switch (eventObject.key)
     {
@@ -203,9 +210,20 @@ player.keydown = function (eventObject)
             player.reveal();
             break;
     }
-};
+}
 
-$(document).on("pagecreate", "#page-library", player.loadIndex);
-$(document).keydown(player.keydown);
+$(document).on("pagecreate", "#page-library", loadIndex);
+$(document).keydown(keydown);
+
+var player = {};
+player.prev = prev;
+player.next = next;
+player.remove = remove;
+player.reveal = reveal;
+player.randomChange = randomChange;
+player.indexcb = indexcb;
+player.loadBook = loadBook;
+player.bookcb = bookcb;
+player.chapterChange = chapterChange;
 
 export default player;
