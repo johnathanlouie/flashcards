@@ -10,9 +10,14 @@ function remove(chapterId)
     delete chapters[chapterId];
 }
 
+function flatten(accumulator, currentValue)
+{
+    return accumulator.concat(currentValue);
+}
+
 function getCards()
 {
-    return Object.values(chapters);
+    return Object.values(chapters).reduce(flatten);
 }
 
 function isEmpty()
