@@ -1,48 +1,23 @@
-var cards = [];
-var chapters = new Map();
+const chapters = {};
 
-function add(bookId, chapterNum, cardsArray)
+function add(chapterId, cards)
 {
-    var id = createId(bookId, chapterNum);
-    chapters.set(id, cardsArray);
-    safeAdd(cardsArray);
+    chapters[chapterId] = cards;
 }
 
-function remove(bookId, chapterNum)
+function remove(chapterId)
 {
-    var id = createId(bookId, chapterNum);
-    chapters.delete(id);
-    cards = [];
-    for (var chapter of chapters.values())
-    {
-        safeAdd(chapter);
-    }
-}
-
-function filterFunc(currentValue)
-{
-    return typeof currentValue !== "undefined";
-}
-
-function safeAdd(cardsArray)
-{
-    var filteredArray = cardsArray.filter(filterFunc);
-    cards = cards.concat(filteredArray);
-}
-
-function createId(bookId, chapterNum)
-{
-    return bookId + "-" + chapterNum;
+    delete chapters[chapterId];
 }
 
 function getCards()
 {
-    return cards.slice();
+    return Object.values(chapters);
 }
 
 function isEmpty()
 {
-    return cards.length === 0;
+    return Object.keys(chapters).length === 0;
 }
 
 const playlist = {};
