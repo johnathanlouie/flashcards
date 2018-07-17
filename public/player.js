@@ -12,16 +12,16 @@ card.definition = $("#card-definition");
 card.all = $(card.form.toArray().concat(card.pronunciation.toArray()).concat(card.definition.toArray()));
 
 let options = {};
-options.random = $("#settings-options-random")[0];
-options.form = $("#settings-options-term")[0];
-options.pronunciation = $("#settings-options-pronunciation")[0];
-options.definition = $("#settings-options-definition")[0];
+options.random = $("#settings-options-random");
+options.form = $("#settings-options-term");
+options.pronunciation = $("#settings-options-pronunciation");
+options.definition = $("#settings-options-definition");
 
 function changeCard()
 {
-    card.form.toggleClass("hidden", !options.form.checked);
-    card.pronunciation.toggleClass("hidden", !options.pronunciation.checked);
-    card.definition.toggleClass("hidden", !options.definition.checked);
+    card.form.toggleClass("hidden", !options.form.prop("checked"));
+    card.pronunciation.toggleClass("hidden", !options.pronunciation.prop("checked"));
+    card.definition.toggleClass("hidden", !options.definition.prop("checked"));
     loadCardInfo(queue.get());
 }
 
