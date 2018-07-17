@@ -242,4 +242,5 @@ $("#button-remove").click(remove);
 $("#button-reveal").click(reveal);
 $("#startpage-startbutton").click(next);
 $("#page-library").one("pageshow", loadIndex);
-$(document).keydown(keydown);
+$("#page-main").on("pageshow", () => $(document).keydown(keydown));
+$("#page-main").on("pagehide", () => $(document).off("keydown", keydown));
