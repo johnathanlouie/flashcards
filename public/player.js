@@ -2,15 +2,15 @@ import playlist from "./playlist.js";
 import queue from "./queue.js";
 import lib from "./lib.js";
 
-var randomCheckbox = "#settings-options-random";
+let randomCheckbox = "#settings-options-random";
 
-var card = {};
+let card = {};
 card.form = $("#card-form")[0];
 card.pronunciation = $("#card-pronunciation")[0];
 card.definition = $("#card-definition")[0];
 card.all = [card.form, card.pronunciation, card.definition];
 
-var options = {};
+let options = {};
 options.random = $("#settings-options-random")[0];
 options.form = $("#settings-options-term")[0];
 options.pronunciation = $("#settings-options-pronunciation")[0];
@@ -30,30 +30,30 @@ function loadCardInfo(word)
     if (word)
     {
         $(card.all).empty();
-        for (var i of word.term)
+        for (let i of word.term)
         {
-            for (var j of i.form)
+            for (let j of i.form)
             {
                 $(card.form).append(j);
             }
-            for (var j of i.pronunciation)
+            for (let j of i.pronunciation)
             {
                 $(card.pronunciation).append(j);
             }
         }
-        for (var i of word.definition)
+        for (let i of word.definition)
         {
-            var p = document.createElement("p");
-            var div = document.createElement("div");
-            var ol = document.createElement("ol");
+            let p = document.createElement("p");
+            let div = document.createElement("div");
+            let ol = document.createElement("ol");
             if (typeof i.partOfSpeech !== "undefined")
             {
-                for (var j of i.partOfSpeech)
+                for (let j of i.partOfSpeech)
                 {
                     $(div).append(j);
                 }
             }
-            for (var j of i.meaning)
+            for (let j of i.meaning)
             {
                 $(ol).append("<li>" + j + "</li>");
             }
@@ -77,7 +77,7 @@ function next()
     {
         if (!queue.hasNext())
         {
-            var cards = playlist.getCards();
+            let cards = playlist.getCards();
             if ($(randomCheckbox).prop("checked"))
             {
                 cards = _.shuffle(cards);
@@ -120,7 +120,7 @@ function reveal()
 
 function indexcb(error, index)
 {
-    var libContainer = "#library-container";
+    let libContainer = "#library-container";
     $(libContainer).empty();
     for (let book of index)
     {
@@ -129,7 +129,7 @@ function indexcb(error, index)
         {
             for (let chapter of chapters)
             {
-                var container = $("<div>").appendTo(chaptersDiv).attr("class", "jl-container-checkbox-1");
+                let container = $("<div>").appendTo(chaptersDiv).attr("class", "jl-container-checkbox-1");
                 let checkbox = $("<input>").appendTo(container);
                 function chapterChange()
                 {
@@ -152,7 +152,7 @@ function indexcb(error, index)
                 $("<label>").appendTo(container).attr("for", `checkbox-${chapter._id}`).text(chapter.ordinal);
             }
         }
-        var bookDiv = $("<div>").appendTo(libContainer).attr("data-role", "collapsible");
+        let bookDiv = $("<div>").appendTo(libContainer).attr("data-role", "collapsible");
         $("<h3>").appendTo(bookDiv).prop("onclick", () => lib.getBook(book._id, bookcb)).text(book.title);
         chaptersDiv.appendTo(bookDiv);
     }
