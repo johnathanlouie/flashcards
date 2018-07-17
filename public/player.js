@@ -2,7 +2,8 @@ import playlist from "./playlist.js";
 import queue from "./queue.js";
 import lib from "./lib.js";
 
-let randomCheckbox = "#settings-options-random";
+let randomCheckbox = $("#settings-options-random");
+let libContainer = $("#library-container");
 
 let card = {};
 card.form = $("#card-form")[0];
@@ -78,7 +79,7 @@ function next()
         if (!queue.hasNext())
         {
             let cards = playlist.getCards();
-            if ($(randomCheckbox).prop("checked"))
+            if (randomCheckbox.prop("checked"))
             {
                 cards = _.shuffle(cards);
             }
@@ -118,20 +119,22 @@ function reveal()
     $(card.all).removeClass("hidden");
 }
 
-function indexcb(error, index)
+function listBooks(error, index)
 {
-    let libContainer = "#library-container";
-    $(libContainer).empty();
+    libContainer.empty();
     for (let book of index)
     {
-        let chaptersDiv = $("<div>").attr("class", "jl-container-flex-1");
-        function bookcb(error, chapters)
+        let chaptersDiv = $("<div>");
+        let header = $("<h3>");
+        let bookDiv = $("<div>");
+        function listChapters(error, chapters)
         {
             for (let chapter of chapters)
             {
-                let container = $("<div>").appendTo(chaptersDiv).attr("class", "jl-container-checkbox-1");
-                let checkbox = $("<input>").appendTo(container);
-                function chapterChange()
+                let container = $("<div>");
+                let checkbox = $("<input>");
+                let label = $("<label>");
+                function onCheckbox()
                 {
                     function cb(error, cards)
                     {
@@ -148,15 +151,22 @@ function indexcb(error, index)
                         $("#startpage-startbutton").toggleClass("ui-disabled", playlist.isEmpty());
                     }
                 }
-                checkbox.attr("id", `checkbox-${chapter._id}`).attr("data-role", "none").attr("type", "checkbox").change(chapterChange);
-                $("<label>").appendTo(container).attr("for", `checkbox-${chapter._id}`).text(chapter.ordinal);
+                let checkboxId = `checkbox-${chapter._id}`;
+                let checkboxAttr = {
+                    "id": checkboxId,
+                    "data-role": "none",
+                    "type": "checkbox"
+                };
+                checkbox.attr(checkboxAttr).change(onCheckbox).appendTo(container);
+                label.attr("for", checkboxId).text(chapter.ordinal).appendTo(container);
+                container.addClass("jl-container-checkbox-1").appendTo(chaptersDiv);
             }
         }
-        let bookDiv = $("<div>").appendTo(libContainer).attr("data-role", "collapsible");
-        $("<h3>").appendTo(bookDiv).prop("onclick", () => lib.getBook(book._id, bookcb)).text(book.title);
-        chaptersDiv.appendTo(bookDiv);
+        header.text(book.title).click(() => lib.getBook(book._id, listChapters)).appendTo(bookDiv);
+        chaptersDiv.addClass("jl-container-flex-1").appendTo(bookDiv);
+        bookDiv.attr("data-role", "collapsible").appendTo(libContainer);
     }
-    $(libContainer).enhanceWithin();
+    libContainer.enhanceWithin();
 }
 
 function keydown(eventObject)
@@ -184,5 +194,5 @@ $("#button-remove").click(remove);
 $("#button-reveal").click(reveal);
 $("#startpage-startbutton").click(next);
 
-$(document).on("pagecreate", "#page-library", () => lib.getIndex(indexcb));
+$(document).on("pagecreate", "#page-library", () => lib.getIndex(listBooks));
 $(document).keydown(keydown);
