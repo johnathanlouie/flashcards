@@ -1,3 +1,5 @@
+/* global _ */
+
 import playlist from "./playlist.js";
 import queue from "./queue.js";
 import lib from "./lib.js";
