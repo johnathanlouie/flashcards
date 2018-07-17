@@ -123,14 +123,14 @@ function listBooks(error, index)
     libContainer.empty();
     for (let book of index)
     {
-        let chaptersDiv = $("<div>");
-        let header = $("<h3>");
         let bookDiv = $("<div>");
+        let header = $("<h3>");
+        let chaptersDiv = $("<div>");
         function listChapters(error, chapters)
         {
-            for (let chapter of chapters)
+            function makeCheckbox(chapter, index)
             {
-                let container = $("<div>");
+                let cell = $("<div>");
                 let checkbox = $("<input>");
                 let label = $("<label>");
                 function onCheckbox()
@@ -140,6 +140,7 @@ function listBooks(error, index)
                         playlist.add(chapter._id, cards);
                         $("#startpage-startbutton").toggleClass("ui-disabled", playlist.isEmpty());
                     }
+                    $("#startpage-startbutton").addClass("ui-disabled");
                     if (checkbox.prop("checked"))
                     {
                         lib.getChapter(chapter._id, cb);
@@ -153,17 +154,37 @@ function listBooks(error, index)
                 let checkboxId = `checkbox-${chapter._id}`;
                 let checkboxAttr = {
                     "id": checkboxId,
-                    "data-role": "none",
-                    "type": "checkbox"
+                    "type": "checkbox",
+                    "data-mini": "true"
                 };
-                checkbox.attr(checkboxAttr).change(onCheckbox).appendTo(container);
-                label.attr("for", checkboxId).text(chapter.ordinal).appendTo(container);
-                container.addClass("jl-container-checkbox-1").appendTo(chaptersDiv);
+                checkbox.attr(checkboxAttr).change(onCheckbox);
+                label.attr("for", checkboxId).text(chapter.ordinal);
+                switch (index % 5)
+                {
+                    case 0:
+                        cell.addClass("ui-block-a");
+                        break;
+                    case 1:
+                        cell.addClass("ui-block-b");
+                        break;
+                    case 2:
+                        cell.addClass("ui-block-c");
+                    case 3:
+                        cell.addClass("ui-block-d");
+                    case 4:
+                        cell.addClass("ui-block-e");
+                        break;
+                }
+                cell.append(checkbox, label).appendTo(chaptersDiv);
             }
+            chapters.forEach(makeCheckbox);
+            libContainer.enhanceWithin();
         }
-        header.text(book.title).click(() => lib.getBook(book._id, listChapters)).appendTo(bookDiv);
-        chaptersDiv.addClass("jl-container-flex-1").appendTo(bookDiv);
-        bookDiv.attr("data-role", "collapsible").appendTo(libContainer);
+        header.text(book.title).click(() => lib.getBook(book._id, listChapters));
+        chaptersDiv.addClass("ui-grid-d");
+        bookDiv.attr("data-role", "collapsible");
+        bookDiv.append(header, chaptersDiv);
+        libContainer.append(bookDiv);
     }
     libContainer.enhanceWithin();
 }
