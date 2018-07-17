@@ -6,10 +6,10 @@ let randomCheckbox = $("#settings-options-random");
 let libContainer = $("#library-container");
 
 let card = {};
-card.form = $("#card-form")[0];
-card.pronunciation = $("#card-pronunciation")[0];
-card.definition = $("#card-definition")[0];
-card.all = [card.form, card.pronunciation, card.definition];
+card.form = $("#card-form");
+card.pronunciation = $("#card-pronunciation");
+card.definition = $("#card-definition");
+card.all = $(card.form.toArray().concat(card.pronunciation.toArray()).concat(card.definition.toArray()));
 
 let options = {};
 options.random = $("#settings-options-random")[0];
@@ -19,9 +19,9 @@ options.definition = $("#settings-options-definition")[0];
 
 function changeCard()
 {
-    $(card.form).toggleClass("hidden", !options.form.checked);
-    $(card.pronunciation).toggleClass("hidden", !options.pronunciation.checked);
-    $(card.definition).toggleClass("hidden", !options.definition.checked);
+    card.form.toggleClass("hidden", !options.form.checked);
+    card.pronunciation.toggleClass("hidden", !options.pronunciation.checked);
+    card.definition.toggleClass("hidden", !options.definition.checked);
     loadCardInfo(queue.get());
 }
 
@@ -30,44 +30,41 @@ function loadCardInfo(word)
 {
     if (word)
     {
-        $(card.all).empty();
+        card.all.empty();
         for (let i of word.term)
         {
             for (let j of i.form)
             {
-                $(card.form).append(j);
+                card.form.append(j);
             }
             for (let j of i.pronunciation)
             {
-                $(card.pronunciation).append(j);
+                card.pronunciation.append(j);
             }
         }
         for (let i of word.definition)
         {
-            let p = document.createElement("p");
-            let div = document.createElement("div");
-            let ol = document.createElement("ol");
+            let p = $("<p>");
+            let div = $("<div>").addClass("partofspeech");
+            let ol = $("<ol>").addClass("meaning");
             if (typeof i.partOfSpeech !== "undefined")
             {
                 for (let j of i.partOfSpeech)
                 {
-                    $(div).append(j);
+                    div.text(j);
                 }
             }
             for (let j of i.meaning)
             {
-                $(ol).append("<li>" + j + "</li>");
+                $("<li>").text(j).appendTo(ol);
             }
-            $(card.definition).append(p);
-            $(p).append(div);
-            $(p).append(ol);
-            $(div).addClass("partofspeech");
-            $(ol).addClass("meaning");
+            p.append(div, ol);
+            card.definition.append(p);
         }
     }
     else
     {
-        $(card.all).text("Out of cards");
+        card.all.text("Out of cards");
     }
 }
 
@@ -116,7 +113,7 @@ function remove()
 
 function reveal()
 {
-    $(card.all).removeClass("hidden");
+    card.all.removeClass("hidden");
 }
 
 function listBooks(error, index)
