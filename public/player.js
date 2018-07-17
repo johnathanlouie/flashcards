@@ -196,20 +196,12 @@ function listBooks(error, index)
             libContainer.enhanceWithin();
             hideLoader();
         }
-        let loadChapterOnce = (function ()
+        function loadBook()
         {
-            let once = false;
-            return function ()
-            {
-                if (!once)
-                {
-                    showLoader();
-                    lib.getBook(book._id, listChapters);
-                    once = true;
-                }
-            };
-        })();
-        header.text(book.title).click(loadChapterOnce);
+            showLoader();
+            lib.getBook(book._id, listChapters);
+        }
+        header.text(book.title).one("click", loadBook);
         chaptersDiv.addClass("ui-grid-d");
         bookDiv.attr("data-role", "collapsible");
         bookDiv.append(header, chaptersDiv);
@@ -241,7 +233,6 @@ function keydown(eventObject)
 function loadIndex()
 {
     showLoader();
-    $(document).off("pageshow", "#page-library");
     lib.getIndex(listBooks);
 }
 
