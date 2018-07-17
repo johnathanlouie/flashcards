@@ -21,9 +21,9 @@ options.definition = $("#settings-options-definition");
 
 function changeCard()
 {
-    card.form.toggleClass("hidden", !options.form.prop("checked"));
-    card.pronunciation.toggleClass("hidden", !options.pronunciation.prop("checked"));
-    card.definition.toggleClass("hidden", !options.definition.prop("checked"));
+    card.form.toggle(options.form.prop("checked"));
+    card.pronunciation.toggle(options.pronunciation.prop("checked"));
+    card.definition.toggle(options.definition.prop("checked"));
     loadCardInfo(queue.get());
 }
 
@@ -115,7 +115,7 @@ function remove()
 
 function reveal()
 {
-    card.all.removeClass("hidden");
+    card.all.show();
 }
 
 function showLoader()
