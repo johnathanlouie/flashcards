@@ -118,6 +118,19 @@ function reveal()
     card.all.removeClass("hidden");
 }
 
+function showLoader()
+{
+    $.mobile.loading("show", {
+        textVisible: true,
+        theme: "b"
+    });
+}
+
+function hideLoader()
+{
+    $.mobile.loading("hide");
+}
+
 function listBooks(error, index)
 {
     libContainer.empty();
@@ -139,10 +152,12 @@ function listBooks(error, index)
                     {
                         playlist.add(chapter._id, cards);
                         $("#startpage-startbutton").toggleClass("ui-disabled", playlist.isEmpty());
+                        hideLoader();
                     }
                     $("#startpage-startbutton").addClass("ui-disabled");
                     if (checkbox.prop("checked"))
                     {
+                        showLoader();
                         lib.getChapter(chapter._id, cb);
                     }
                     else
@@ -179,6 +194,7 @@ function listBooks(error, index)
             }
             chapters.forEach(makeCheckbox);
             libContainer.enhanceWithin();
+            hideLoader();
         }
         let loadChapterOnce = (function ()
         {
@@ -187,6 +203,7 @@ function listBooks(error, index)
             {
                 if (!once)
                 {
+                    showLoader();
                     lib.getBook(book._id, listChapters);
                     once = true;
                 }
@@ -199,6 +216,7 @@ function listBooks(error, index)
         libContainer.append(bookDiv);
     }
     libContainer.enhanceWithin();
+    hideLoader();
 }
 
 function keydown(eventObject)
@@ -220,11 +238,18 @@ function keydown(eventObject)
     }
 }
 
+function loadIndex()
+{
+    showLoader();
+    $(document).off("pageshow", "#page-library");
+    lib.getIndex(listBooks);
+}
+
 $("#button-prev").click(prev);
 $("#button-next").click(next);
 $("#button-remove").click(remove);
 $("#button-reveal").click(reveal);
 $("#startpage-startbutton").click(next);
 
-$(document).on("pagecreate", "#page-library", () => lib.getIndex(listBooks));
+$(document).on("pageshow", "#page-library", loadIndex);
 $(document).keydown(keydown);
