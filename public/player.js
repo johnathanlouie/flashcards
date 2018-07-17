@@ -180,7 +180,19 @@ function listBooks(error, index)
             chapters.forEach(makeCheckbox);
             libContainer.enhanceWithin();
         }
-        header.text(book.title).click(() => lib.getBook(book._id, listChapters));
+        let loadChapterOnce = (function ()
+        {
+            let once = false;
+            return function ()
+            {
+                if (!once)
+                {
+                    lib.getBook(book._id, listChapters);
+                    once = true;
+                }
+            };
+        })();
+        header.text(book.title).click(loadChapterOnce);
         chaptersDiv.addClass("ui-grid-d");
         bookDiv.attr("data-role", "collapsible");
         bookDiv.append(header, chaptersDiv);
