@@ -6,6 +6,7 @@ import lib from "./lib.js";
 
 let randomCheckbox = $("#settings-options-random");
 let libContainer = $("#library-container");
+let emptyPopup = $("#popup-empty");
 
 let card = {};
 card.form = $("#card-form");
@@ -27,50 +28,42 @@ function changeCard()
     loadCardInfo(queue.get());
 }
 
-// not all fields are guaranteed, need handle
 function loadCardInfo(word)
 {
-    if (word)
+    card.all.empty();
+    for (let i of word.term)
     {
-        card.all.empty();
-        for (let i of word.term)
+        for (let j of i.form)
         {
-            for (let j of i.form)
-            {
-                card.form.append(j);
-            }
-            for (let j of i.pronunciation)
-            {
-                card.pronunciation.append(j);
-            }
+            card.form.append(j);
         }
-        for (let i of word.definition)
+        for (let j of i.pronunciation)
         {
-            let p = $("<p>");
-            let div = $("<div>").addClass("partofspeech");
-            let ol = $("<ol>").addClass("meaning");
-            if (typeof i.partOfSpeech !== "undefined")
-            {
-                for (let j of i.partOfSpeech)
-                {
-                    div.text(j);
-                }
-            }
-            for (let j of i.meaning)
-            {
-                $("<li>").text(j).appendTo(ol);
-            }
-            p.append(div, ol);
-            card.definition.append(p);
+            card.pronunciation.append(j);
         }
     }
-    else
+    for (let i of word.definition)
     {
-        card.all.text("Out of cards");
+        let p = $("<p>");
+        let div = $("<div>").addClass("partofspeech");
+        let ol = $("<ol>").addClass("meaning");
+        if (typeof i.partOfSpeech !== "undefined")
+        {
+            for (let j of i.partOfSpeech)
+            {
+                div.text(j);
+            }
+        }
+        for (let j of i.meaning)
+        {
+            $("<li>").text(j).appendTo(ol);
+        }
+        p.append(div, ol);
+        card.definition.append(p);
     }
+    card.all.enhanceWithin();
 }
 
-// what if queue isnt empty
 function next()
 {
     if (!playlist.isEmpty())
@@ -83,15 +76,13 @@ function next()
                 cards = _.shuffle(cards);
             }
             queue.addCards(cards);
-            //queue.print();// diagnostic
         }
         queue.next();
         changeCard();
     }
     else
     {
-        // alert user is empty
-        console.log("playlist empty");
+        emptyPopup.popup("open");
     }
 }
 
@@ -104,7 +95,7 @@ function prev()
     }
     else
     {
-        // what if empty
+        emptyPopup.popup("open");
     }
 }
 
