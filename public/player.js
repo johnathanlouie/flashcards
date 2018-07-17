@@ -241,6 +241,5 @@ $("#button-next").click(next);
 $("#button-remove").click(remove);
 $("#button-reveal").click(reveal);
 $("#startpage-startbutton").click(next);
-
-$(document).on("pageshow", "#page-library", loadIndex);
+$("#page-library").one("pageshow", loadIndex);
 $(document).keydown(keydown);
