@@ -66,24 +66,22 @@ function loadCardInfo(word)
 
 function next()
 {
-    if (!playlist.isEmpty())
+    if (!queue.hasNext())
     {
-        if (!queue.hasNext())
+        if (playlist.isEmpty())
         {
-            let cards = playlist.getCards();
-            if (randomCheckbox.prop("checked"))
-            {
-                cards = _.shuffle(cards);
-            }
-            queue.addCards(cards);
+            emptyPopup.popup("open");
+            return;
         }
-        queue.next();
-        changeCard();
+        let cards = playlist.getCards();
+        if (randomCheckbox.prop("checked"))
+        {
+            cards = _.shuffle(cards);
+        }
+        queue.addCards(cards);
     }
-    else
-    {
-        emptyPopup.popup("open");
-    }
+    queue.next();
+    changeCard();
 }
 
 function prev()
@@ -101,7 +99,12 @@ function prev()
 
 function remove()
 {
-
+    let card = queue.get();
+    if (card)
+    {
+        playlist.removeCard(card._id);
+        next();
+    }
 }
 
 function reveal()
