@@ -2,7 +2,7 @@
 ## Technologies
 - Apache HTTP Server 2.4
 - MySQL 5.6.51
-- PHP 5.5.16
+- PHP 5.5.38
 - HTML 5
 - CSS 2.1
 - JavaScript ES5
