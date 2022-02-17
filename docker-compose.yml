@@ -7,3 +7,5 @@ services:
       - 80:80
   mysql:
     image: mysql:5.6.51
+    volumes:
+      - ./mysql:/var/lib/mysql
