@@ -1,6 +1,6 @@
 # LWD Flashcards
 ## Technologies
-- Debian 7 (Wheezy)
+- Debian 8 (Jessie)
 - Apache HTTP Server 2.4
 - MySQL 5.6.51
 - PHP 5.5.38
