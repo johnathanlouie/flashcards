@@ -1,6 +1,6 @@
 services:
   app:
-    image: php:5.5.38-apache
+    build: .
     volumes:
       - ./src:/var/www/html
     ports:
