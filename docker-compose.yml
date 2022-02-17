@@ -3,6 +3,7 @@ services:
     build: .
     volumes:
       - ./src:/var/www/html
+      - ./log:/var/log/apache2
     ports:
       - 80:80
   mysql:
