@@ -1,0 +1,38 @@
+{
+    "name": "lwd/flashcards",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Johnathan Louie",
+            "email": "johnathanlouie88@gmail.com",
+            "homepage": "https://jlouie.io",
+            "role": "Developer"
+        }
+    ],
+    "readme": "../../README.md",
+    "license": "AGPL-3.0-or-later",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/johnathanlouie/lwd-rest-framework"
+        }
+    ],
+    "require": {
+        "php": ">=5.5",
+        "ext-json": "*",
+        "lwd/rest-framework": "0.0.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8.36"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lwd\\Flashcards\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Lwd\\Flashcards\\Tests\\": "tests/"
+        }
+    }
+}
