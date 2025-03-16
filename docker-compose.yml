@@ -1,6 +1,7 @@
 services:
   app:
-    build: .
+    container_name: composer
+    build: docker/app
     volumes:
       - ./src:/var/www/html
       - ./log:/var/log/apache2
