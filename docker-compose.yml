@@ -1,6 +1,6 @@
 services:
   app:
-    container_name: composer
+    container_name: app
     build: docker/app
     volumes:
       - ./src:/var/www/html
