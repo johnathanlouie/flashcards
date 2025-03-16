@@ -1,0 +1,9 @@
+{
+    "name": "lwd-flashcards",
+    "private": true,
+    "dependencies": {
+        "jquery": "~2.0.3",
+        "jquery-mobile": "~1.3.2",
+        "lodash": "~0.8.2"
+    }
+}
