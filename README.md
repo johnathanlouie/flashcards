@@ -5,6 +5,7 @@
 - MySQL 5.6.13
 - PHP 5.5.1
 - Composer 1.0.0-alpha7
+- PHPUnit 3.7.22
 - Bower 1.0.3
 - HTML 5
 - CSS 2.1
