@@ -10,3 +10,9 @@ services:
     image: mysql:5.6.51
     volumes:
       - ./mysql:/var/lib/mysql
+  bower:
+    container_name: bower
+    build: docker/bower
+    working_dir: /app
+    volumes:
+      - .:/app
