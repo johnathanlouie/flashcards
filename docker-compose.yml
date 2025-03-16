@@ -3,7 +3,9 @@ services:
     container_name: app
     build: docker/app
     volumes:
-      - ./src:/var/www/html
+      - ./public:/var/www/html
+      - ./src:/app/src
+      - ./vendor:/app/vendor
       - ./log:/var/log/apache2
     ports:
       - 80:80
