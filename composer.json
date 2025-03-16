@@ -25,7 +25,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Lwd\\Flashcards\\": "app/"
+            "Lwd\\Flashcards\\": "src/"
         }
     },
     "autoload-dev": {
