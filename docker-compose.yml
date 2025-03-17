@@ -4,7 +4,6 @@ services:
     build: docker/dev
     volumes:
       - .:/workspaces
-    command: sleep infinity
   app:
     container_name: app
     build: docker/app
