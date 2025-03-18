@@ -35,7 +35,8 @@
 			"settings": {
 				"files.trimFinalNewlines": false,
 				"files.insertFinalNewline": true,
-				"files.eol": "\n"
+				"files.eol": "\n",
+                "intelephense.environment.phpVersion": "5.5"
 			}
 		}
 	}
